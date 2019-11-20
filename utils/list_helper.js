@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const dummy = (blogs) => {
   return 1;
 };
@@ -59,9 +60,40 @@ const mostBlogs = (blogs) => {
   return authorMostBlogs;
 };
 
+const mostLikes = (blogs) => {
+  const authors = [
+    ...new Set(
+      blogs.map((blog) => {
+        return { author: blog.author, likes: 0 };
+      })
+    )
+  ];
+
+  authors.forEach((author) => {
+    blogs.map((blog) => {
+      if (blog.author === author.author) {
+        return author.likes += blog.likes;
+      }
+      return;
+    });
+  });
+
+  const initialValue = 0;
+  const mostLikes = authors.reduce((accumulator, currentValue) => {
+    return Math.max(accumulator, currentValue.likes);
+  }, initialValue);
+
+  const authorMostLikes = authors.find((author) => {
+    return author.likes === mostLikes;
+  });
+
+  return authorMostLikes;
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 };

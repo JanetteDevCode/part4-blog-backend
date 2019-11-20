@@ -150,7 +150,25 @@ describe('author with most blogs', () => {
     });
   });
 
-  test('of a list with more than one blog', () => {
+  test('of a list with more than one blog from the same author', () => {
+    const listWithTwoBlogs = listWithOneBlog.concat({
+      _id: '7a422aa71b54a676234d17f1',
+      title: 'To Be Determined',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      likes: 20,
+      __v: 0
+    });
+
+    const result = listHelper.mostBlogs(listWithTwoBlogs);
+
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      blogs: 2
+    });
+  });
+
+  test('of a list with more than one blog and several authors', () => {
     const result = listHelper.mostBlogs(listWithManyBlogs);
 
     expect(result).toEqual({
@@ -159,7 +177,7 @@ describe('author with most blogs', () => {
     });
   });
 
-  test('of a list with more than one blog where there is more than one top blogger', () => {
+  test('of a list with more than one top blogger', () => {
     const listWithManyBlogsExtended = listWithManyBlogs.concat({
       _id: 'aa422b3a1b54a676234d17f1',
       title: 'Another Day, Another Post',
@@ -184,11 +202,93 @@ describe('author with most blogs', () => {
     } /* index 8 */);
 
     const result = listHelper.mostBlogs(listWithManyBlogsExtended);
-    console.log(result);
 
     expect(result).toEqual({
       author: 'Robert C. Martin',
       blogs: 3
+    });
+  });
+});
+
+describe('author with most likes', () => {
+  test('of an empty blog list is undefined', () => {
+    const result = listHelper.mostLikes([]);
+
+    expect(result).toEqual(undefined);
+  });
+
+  test('of a list with one blog is its author', () => {
+    const result = listHelper.mostLikes(listWithOneBlog);
+
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 5
+    });
+  });
+
+  test('of a list with more than one blog from the same author', () => {
+    const listWithTwoBlogs = listWithOneBlog.concat({
+      _id: '7a422aa71b54a676234d17f1',
+      title: 'To Be Determined',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      likes: 20,
+      __v: 0
+    });
+
+    const result = listHelper.mostLikes(listWithTwoBlogs);
+
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 25
+    });
+  });
+
+  test('of a list with more than one blog and several authors', () => {
+    const result = listHelper.mostLikes(listWithManyBlogs);
+
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    });
+  });
+
+  test('of a list with more than one top blogger', () => {
+    const listWithManyBlogsExtended = listWithManyBlogs.concat({
+      _id: 'aa422b3a1b54a676234d17f1',
+      title: 'Another Day, Another Post',
+      author: 'Prolific Writer',
+      url: 'http://prolificwriter.net',
+      likes: 13,
+      __v: 0
+    } /* index 6 */,  {
+      _id: 'aa422b3a1b54a676234d17f2',
+      title: 'What to Write...',
+      author: 'Prolific Writer',
+      url: 'http://prolificwriter.net',
+      likes: 13,
+      __v: 0
+    } /* index 7 */, {
+      _id: 'aa422b3a1b54a676234d17f3',
+      title: 'I Am Out of Ideas',
+      author: 'Prolific Writer',
+      url: 'http://prolificwriter.net',
+      likes: 100,
+      __v: 0
+    } /* index 8 */, {
+      _id: 'aa422b3a1b54a676234d17f4',
+      title: 'All I Got Was an Error',
+      author: 'Baffled Coder',
+      url: 'http://huhwut.confused',
+      likes: 126,
+      __v: 0
+    } /* index 9 */);
+
+    const result = listHelper.mostLikes(listWithManyBlogsExtended);
+
+    expect(result).toEqual({
+      author: 'Prolific Writer',
+      likes: 126
     });
   });
 });
