@@ -133,3 +133,62 @@ describe('favorite blog', () => {
     });
   });
 });
+
+describe('author with most blogs', () => {
+  test('of an empty blog list is undefined', () => {
+    const result = listHelper.mostBlogs([]);
+
+    expect(result).toEqual(undefined);
+  });
+
+  test('of a list with one blog is its author', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog);
+
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      blogs: 1
+    });
+  });
+
+  test('of a list with more than one blog', () => {
+    const result = listHelper.mostBlogs(listWithManyBlogs);
+
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3
+    });
+  });
+
+  test('of a list with more than one blog where there is more than one top blogger', () => {
+    const listWithManyBlogsExtended = listWithManyBlogs.concat({
+      _id: 'aa422b3a1b54a676234d17f1',
+      title: 'Another Day, Another Post',
+      author: 'Prolific Writer',
+      url: 'http://prolificwriter.net',
+      likes: 13,
+      __v: 0
+    } /* index 6 */,  {
+      _id: 'aa422b3a1b54a676234d17f2',
+      title: 'What to Write...',
+      author: 'Prolific Writer',
+      url: 'http://prolificwriter.net',
+      likes: 13,
+      __v: 0
+    } /* index 7 */, {
+      _id: 'aa422b3a1b54a676234d17f3',
+      title: 'I Am Out of Ideas',
+      author: 'Prolific Writer',
+      url: 'http://prolificwriter.net',
+      likes: 100,
+      __v: 0
+    } /* index 8 */);
+
+    const result = listHelper.mostBlogs(listWithManyBlogsExtended);
+    console.log(result);
+
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3
+    });
+  });
+});

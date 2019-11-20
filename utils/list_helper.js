@@ -15,11 +15,10 @@ const favoriteBlog = (blogs) => {
   const mostLikes = blogs.reduce((accumulator, currentValue) => {
     return Math.max(accumulator, currentValue.likes);
   }, initialValue);
-  const likes = blogs.map((blog) => {
-    return blog.likes;
+
+  const favoriteBlog = blogs.find((blog) => {
+    return blog.likes === mostLikes;
   });
-  const mostLikesIndex = likes.indexOf(mostLikes);
-  const favoriteBlog = blogs[mostLikesIndex];
 
   return favoriteBlog
     ? {
@@ -30,8 +29,39 @@ const favoriteBlog = (blogs) => {
     : undefined;
 };
 
+const mostBlogs = (blogs) => {
+  const authors = [
+    ...new Set(
+      blogs.map((blog) => {
+        return { author: blog.author, blogs: 0 };
+      })
+    )
+  ];
+
+  authors.forEach((author) => {
+    blogs.map((blog) => {
+      if (blog.author === author.author) {
+        return author.blogs += 1;
+      }
+      return;
+    });
+  });
+
+  const initialValue = 0;
+  const mostBlogs = authors.reduce((accumulator, currentValue) => {
+    return Math.max(accumulator, currentValue.blogs);
+  }, initialValue);
+
+  const authorMostBlogs = authors.find((author) => {
+    return author.blogs === mostBlogs;
+  });
+
+  return authorMostBlogs;
+};
+
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 };
